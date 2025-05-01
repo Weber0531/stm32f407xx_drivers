@@ -3,6 +3,8 @@
  *
  *  Created on: May 1, 2025
  *      Author: weber
+ *      brief: write a program to connect external button to PB12 and external LED to PA14.
+ *      	   Toggle the LED whenever the external button is pressed
  */
 
 
@@ -22,7 +24,7 @@ int main(void){
 
 	// this is led gpio configuration
 	GpioLed.pGPIOx = GPIOA;
-	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_8;
 	GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
 	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	GpioLed.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
@@ -48,7 +50,7 @@ int main(void){
 	while(1){
 		if(GPIO_ReadFromInputPin(GPIOB, GPIO_PIN_NO_12) == BTN_PRESSED){
 			delay(); // de-bouncing
-			GPIO_ToggleOutputPin(GPIOA, GPIO_PIN_NO_14);
+			GPIO_ToggleOutputPin(GPIOA, GPIO_PIN_NO_8);
 		}
 
 	}
