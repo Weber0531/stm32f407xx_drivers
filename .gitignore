@@ -1,0 +1,19 @@
+# STM32CubeIDE
+*.launch
+*.log
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.su
+*.dep
+
+# Folders
+Debug/
+Release/
+.settings/
+.metadata/
+.launches/
+MX_*/ 
