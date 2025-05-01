@@ -210,25 +210,37 @@ void GPIO_DeInit(GPIO_RegDef_t *pGPIOx){
  * @Note              -
 
  */
-uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber);
+uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber){
+	uint8_t value;
+
+	value = (uint8_t)((pGPIOx->IDR >> PinNumber) & 0x1);
+
+	return value;
+}
 
 
 
 /*********************************************************************
  * @fn      		  - GPIO_ReadFromInputPort
  *
- * @brief             -
+ * @brief             - Reads the entire 16-bit input data register (IDR) of a GPIO port
  *
+ * @param[in]         - pGPIOx: pointer to GPIO peripheral base address
  * @param[in]         -
  * @param[in]         -
- * @param[in]         -
  *
- * @return            -
+ * @return            - 16-bit value representing input state of all 16 pins (0x0000 ~ 0xFFFF)
  *
- * @Note              -
+ * @Note              - Each bit in the return value corresponds to the state of one GPIO pin
 
  */
-uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx);
+uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx){
+	uint16_t value;
+
+	value = (uint16_t)pGPIOx->IDR;
+
+	return value;
+}
 
 
 
