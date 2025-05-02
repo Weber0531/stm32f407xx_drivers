@@ -95,6 +95,11 @@ typedef struct
 	__vo uint32_t AFR[2];	// AFR[0] : GPIO alternate function low register, AFR[1] : GPIO alternate function high register 	Address offset: 0x20~0x24
 }GPIO_RegDef_t;
 
+
+
+/*
+ * peripheral register definition structure for RCC
+ */
 typedef struct
 {
 	__vo uint32_t 	CR;				// RCC clock control register,											Address offset: 0x00
@@ -129,6 +134,35 @@ typedef struct
 	__vo uint32_t 	PLLI2SCFGR;		// RCC PLLI2S configuration register,									Address offset: 0x84
 }RCC_RegDef_t;
 
+
+/*
+ * peripheral register definition structure for EXTI
+ */
+typedef struct
+{
+	__vo uint32_t IMR;    // Interrupt Mask Register,          	  	    Address offset: 0x00
+	__vo uint32_t EMR;    // Event Mask Register,               		Address offset: 0x04
+	__vo uint32_t RTSR;   // Rising Trigger Selection Register, 	    Address offset: 0x08
+	__vo uint32_t FTSR;   // Falling Trigger Selection Register,		Address offset: 0x0C
+	__vo uint32_t SWIER;  // Software Interrupt Event Register,			Address offset: 0x10
+	__vo uint32_t PR;     // Pending Register,                   		Address offset: 0x14
+}EXTI_RegDef_t;
+
+
+/*
+ * peripheral register definition structure for SYSCFG
+ */
+typedef struct
+{
+	__vo uint32_t MEMRMP;    	// SYSCFG memory remap register,          	  	    			Address offset: 0x00
+	__vo uint32_t PMC;    		// SYSCFG peripheral mode configuration register,               Address offset: 0x04
+	__vo uint32_t EXTICR[4];    // SYSCFG external interrupt configuration register 1 to 4,     Address offset: 0x08~0x14
+	uint32_t RESERVED[2];	// Reserved, 0x18~0x1C
+	__vo uint32_t CMPCR; 		// Compensation cell control register,							Address offset: 0x20
+}SYSCFG_RegDef_t;
+
+
+
 /*
  *  Peripheral definitions (Peripheral base addresses typecasted to xxx_RegDef_t)
  */
@@ -143,6 +177,10 @@ typedef struct
 #define GPIOI 		((GPIO_RegDef_t*)GPIOI_BASEADDR)
 
 #define RCC			((RCC_RegDef_t*)RCC_BASEADDR)
+
+#define EXTI		((EXTI_RegDef_t*)EXTI_BASEADDR)
+
+#define SYSCFG		((SYSCFG_RegDef_t*)SYSCFG_BASEADDR)
 
 /*
  *  Clock Enable Macros for GPIOx Peripherals
@@ -240,6 +278,25 @@ typedef struct
 #define GPIOG_REG_RESET()		do{	(RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR &= ~(1 << 6));	}while(0)
 #define GPIOH_REG_RESET()		do{	(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7));	}while(0)
 #define GPIOI_REG_RESET()		do{	(RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8));	}while(0)
+
+
+/*
+ *  returns port code for given GPIOx base address
+ */
+/*
+ *  This macro returns a code( between 0 to 8) for a given GPIO base address(x)
+ */
+#define GPIO_BASEADDR_TO_CODE(x)	((x == GPIOA)? 0 : \
+									 (x == GPIOB)? 1 : \
+									 (x == GPIOC)? 2 : \
+									 (x == GPIOD)? 3 : \
+									 (x == GPIOE)? 4 : \
+									 (x == GPIOF)? 5 : \
+									 (x == GPIOG)? 6 : \
+									 (x == GPIOH)? 7 : \
+									 (x == GPIOI)? 8 : 0)
+
+
 
 
 

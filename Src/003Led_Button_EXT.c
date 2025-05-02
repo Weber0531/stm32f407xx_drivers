@@ -11,7 +11,7 @@
 #include "stm32f407xx.h"
 
 #define HIGH 1
-#define Low 0
+#define LOW 0
 #define BTN_PRESSED LOW
 
 void delay(void){
