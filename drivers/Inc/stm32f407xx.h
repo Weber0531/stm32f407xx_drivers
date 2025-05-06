@@ -339,6 +339,14 @@ typedef struct
 
 
 /*
+ *  Macros to reset SPIx peripherals
+ */
+#define SPI1_REG_RESET()		do{	(RCC->APB2RSTR |= (1 << 12)); (RCC->APB2RSTR &= ~(1 << 12)); }while(0)
+#define SPI2_REG_RESET()		do{	(RCC->APB1RSTR |= (1 << 14)); (RCC->APB1RSTR &= ~(1 << 14)); }while(0)
+#define SPI3_REG_RESET()		do{	(RCC->APB1RSTR |= (1 << 15)); (RCC->APB1RSTR &= ~(1 << 15)); }while(0)
+
+
+/*
  *  returns port code for given GPIOx base address
  */
 /*
