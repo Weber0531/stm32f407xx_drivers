@@ -197,11 +197,26 @@ typedef struct
 	__vo uint32_t MEMRMP;    	// SYSCFG memory remap register,          	  	    			Address offset: 0x00
 	__vo uint32_t PMC;    		// SYSCFG peripheral mode configuration register,               Address offset: 0x04
 	__vo uint32_t EXTICR[4];    // SYSCFG external interrupt configuration register 1 to 4,     Address offset: 0x08~0x14
-	uint32_t RESERVED[2];	// Reserved, 0x18~0x1C
+	uint32_t RESERVED[2];		// Reserved, 0x18~0x1C
 	__vo uint32_t CMPCR; 		// Compensation cell control register,							Address offset: 0x20
 }SYSCFG_RegDef_t;
 
 
+/*
+ * peripheral register definition structure for SPI
+ */
+typedef struct
+{
+	__vo uint32_t CR1;
+	__vo uint32_t CR2;
+	__vo uint32_t SR;
+	__vo uint32_t DR;
+	__vo uint32_t CRCPR;
+	__vo uint32_t RXCRCR;
+	__vo uint32_t TXCRCR;
+	__vo uint32_t I2SCFGR;
+	__vo uint32_t I2SPR;
+}SPI_RegDef_t;
 
 /*
  *  Peripheral definitions (Peripheral base addresses typecasted to xxx_RegDef_t)
