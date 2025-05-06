@@ -121,6 +121,14 @@ void SPI_DeInit(SPI_RegDef_t *pSPIx){
 }
 
 
+uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName){
+	if(pSPIx->SR & FlagName) {
+		return FLAG_SET;
+	}
+	return FLAG_RESET;
+}
+
+
 /*********************************************************************
  * @fn      		  - SPI_SendData
  *
@@ -136,7 +144,23 @@ void SPI_DeInit(SPI_RegDef_t *pSPIx){
 
  */
 void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len){
+	while(Len > 0) {
+		// 1. wait until TXE is set
+		while(SPI_GetFlagStatus(pSPIx, SPI_TXE_FLAG) == FLAG_RESET);
 
+		// 2. check the DFF bit in CR1
+		if(pSPIx->CR1 & (1 << SPI_CR1_DFF)) {
+			// 16 bits DFF
+			//1. load the data in to the DR
+			pSPIx->DR = *((uint16*)pTxBuffer);
+			Len--;
+			Len--;
+		} else {
+			// 8 bits DFF
+			pSPIx->DR = *pTxBuffer;
+			Len--;
+		}
+	}
 }
 
 
