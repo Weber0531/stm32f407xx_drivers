@@ -72,7 +72,17 @@ int main(void){
 	// This function is used to initialize the SPI2 peripheral parameters
 	SPI2_Inits();
 
+	// This makes NSS signal internally high and avoids MODF error
+	SPI_SSIConfig(SPI2, ENABLE);
+
+	// Enable the SPI2 peripheral
+	SPI_PeripheralControl(SPI2, ENABLE);
+
+	// To send data
 	SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
+
+	// Disable the SPI2 peripheral
+	SPI_PeripheralControl(SPI2, DISABLE);
 
 	return 0;
 }

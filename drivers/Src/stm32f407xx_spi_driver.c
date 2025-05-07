@@ -192,7 +192,7 @@ void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len){
 /*********************************************************************
  * @fn      		  - SPI_PeripheralControl
  *
- * @brief             - Enable the SPI peripheral
+ * @brief             - Enable or disable the SPIx peripheral
  *
  * @param[in]         -
  * @param[in]         -
@@ -210,6 +210,30 @@ void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
 		pSPIx->CR1 &= ~(1 << SPI_CR1_SPE);
 	}
 }
+
+
+/*********************************************************************
+ * @fn      		  - SPI_SSIConfig
+ *
+ * @brief             - Enable or disable the SSI bit when SSM = 1
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_SSIConfig(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
+	if(EnorDi == ENABLE) {
+		pSPIx->CR1 |= (1 << SPI_CR1_SSI);
+	} else {
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SSI);
+	}
+}
+
 
 
 /*********************************************************************
