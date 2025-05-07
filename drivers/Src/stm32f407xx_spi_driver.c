@@ -59,12 +59,16 @@ void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
 
  */
 void SPI_Init(SPI_Handle_t *pSPIHandle){
+
+	// Enable the peripheral clock
+	SPI_PeriClockControl(pSPIHandle->pSPIx, ENABLE);
+
 	// first let's configure the SPI_CR1 register
 
 	uint32_t tempreg = 0;
 
 	// 1. configure the device mode
-	tempreg |= pSPIHandle->SPIConfig.SPI_DeviceMode << 2;
+	tempreg |= (pSPIHandle->SPIConfig.SPI_DeviceMode << 2);
 
 	// 2. Configure the bus config
 	if(pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_FD) {
@@ -72,25 +76,25 @@ void SPI_Init(SPI_Handle_t *pSPIHandle){
 		tempreg &= ~(1 << 15);
 	} else if(pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_HD) {
 		// BIDI mode should be set
-		tempreg |= 1 << 15;
+		tempreg |= (1 << 15);
 	} else if(pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_SIMPLEX_RXONLY) {
 		// BIDI mode should be cleared
 		tempreg &= ~(1 << 15);
 		// RXONLY bit must be set
-		tempreg |= 1 << 10;
+		tempreg |= (1 << 10);
 	}
 
 	// 3. Configure the SPI serial clock speed (baud rate)
-	tempreg |= pSPIHandle->SPIConfig.SPI_SclkSpeed << 3;
+	tempreg |= (pSPIHandle->SPIConfig.SPI_SclkSpeed << 3);
 
 	// 4.  Configure the DFF
-	tempreg |= pSPIHandle->SPIConfig.SPI_DFF << 11;
+	tempreg |= (pSPIHandle->SPIConfig.SPI_DFF << 11);
 
 	// 5.  Configure the CPOL
-	tempreg |= pSPIHandle->SPIConfig.SPI_CPOL << 1;
+	tempreg |= (pSPIHandle->SPIConfig.SPI_CPOL << 1);
 
 	// 6.  Configure the CPHA
-	tempreg |= pSPIHandle->SPIConfig.SPI_CPHA << 0;
+	tempreg |= (pSPIHandle->SPIConfig.SPI_CPHA << 0);
 
 	pSPIHandle->pSPIx->CR1 = tempreg;
 }
@@ -182,6 +186,29 @@ void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len){
  */
 void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len){
 
+}
+
+
+/*********************************************************************
+ * @fn      		  - SPI_PeripheralControl
+ *
+ * @brief             - Enable the SPI peripheral
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
+	if(EnorDi == ENABLE) {
+		pSPIx->CR1 |= (1 << SPI_CR1_SPE);
+	} else {
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SPE);
+	}
 }
 
 
