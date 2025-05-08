@@ -125,6 +125,20 @@ void SPI_DeInit(SPI_RegDef_t *pSPIx){
 }
 
 
+/*********************************************************************
+ * @fn      		  - SPI_GetFlagStatus
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            - 0 or 1
+ *
+ * @Note              -
+
+ */
 uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName){
 	if(pSPIx->SR & FlagName) {
 		return FLAG_SET;
@@ -231,6 +245,29 @@ void SPI_SSIConfig(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
 		pSPIx->CR1 |= (1 << SPI_CR1_SSI);
 	} else {
 		pSPIx->CR1 &= ~(1 << SPI_CR1_SSI);
+	}
+}
+
+
+/*********************************************************************
+ * @fn      		  - SPI_SSOEConfig
+ *
+ * @brief             - Enable or disable the SSOE bit when SSM = 1
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_SSOEConfig(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
+	if(EnorDi == ENABLE) {
+		pSPIx->CR2 |= (1 << SPI_CR2_SSOE);
+	} else {
+		pSPIx->CR2 &= ~(1 << SPI_CR2_SSOE);
 	}
 }
 
