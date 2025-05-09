@@ -8,6 +8,7 @@
 #ifndef STM32F407XX_H_
 #define STM32F407XX_H_
 
+#include <stddef.h>
 #include <stdint.h>
 #define __vo volatile
 

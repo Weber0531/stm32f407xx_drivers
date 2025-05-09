@@ -112,6 +112,15 @@ typedef struct
 
 
 /*
+ *  Possible SPI Application events
+ */
+#define SPI_EVENT_TX_CMPLT		1
+#define SPI_EVENT_RX_CMPLT		2
+#define SPI_EVENT_OVR_ERR		3
+#define SPI_EVENT_CRC_ERR		4
+
+
+/*
  * SPI related status flags definitions
  */
 #define SPI_TXE_FLAG	(1 << SPI_SR_TXE)
