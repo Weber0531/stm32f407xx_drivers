@@ -103,9 +103,19 @@ void GPIO_ButtonInit(void){
 }
 
 
+uint8_t SPI_VerifyResponse(uint8_t ackbyte){
+	if(ackbyte == 0xf5) {
+		// ACK
+		return 1;
+	}
+	return 0;
+}
+
+
 int main(void){
 
-	uint8_t dummy_byte = 0xff;
+	uint8_t dummy_write = 0xff;
+	uint8_t dummy_read;
 
 	// This function is used to initialize the GPIO button
 	GPIO_ButtonInit();
@@ -136,7 +146,72 @@ int main(void){
 
 		// 1. COMMAND_LED_CTRL		<pin no(1)>		<value(1)>
 		uint8_t commandcode = COMMAND_LED_CTRL;
+		uint8_t ackbyte;
+		uint8_t args[2];
 		SPI_SendData(SPI2, &commandcode, 1);
+
+		// Do dummy read to clear off the RXNE
+		SPI_ReceiveData(SPI2, &dummy_read, 1);
+
+		// Send some dummy bits (1 byte) to fetch the response from the slave
+		SPI_SendData(SPI2, &dummy_write, 1);
+
+		// Read the ACK byte received
+		SPI_ReceiveData(SPI2, &ackbyte, 1);
+
+		if(SPI_VerifyResponse(ackbyte)) {
+			args[0] = LED_PIN;
+			args[1] = LED_ON;
+			SPI_SendData(SPI2, args, 2);
+		}
+		//end of COMMAND_LED_CTRL
+
+
+
+		//2. CMD_SENOSR_READ   <analog pin number(1) >
+		// wait till button is pressed
+		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+
+		// to avoid button de-bouncing related issues 200ms of delay
+		delay();
+
+		commandcode = COMMAND_SENSOR_READ;
+		SPI_SendData(SPI2, &commandcode, 1);
+
+		// Do dummy read to clear off the RXNE
+		SPI_ReceiveData(SPI2, &dummy_read, 1);
+
+		// Send some dummy bits (1 byte) to fetch the response from the slave
+		SPI_SendData(SPI2, &dummy_write, 1);
+
+		// Read the ACK byte received
+		SPI_ReceiveData(SPI2, &ackbyte, 1);
+
+		if(SPI_VerifyResponse(ackbyte)) {
+			args[0] = ANALOG_PIN0;
+			// Send arguments
+			SPI_SendData(SPI2, args, 1);
+
+			// Do dummy read to clear off the RXNE
+			SPI_ReceiveData(SPI2, &dummy_read, 1);
+
+			// insert some delay so that slave can ready with the data
+			delay();
+
+			// Send some dummy bits (1 byte) to fetch the response from the slave
+			SPI_SendData(SPI2, &dummy_write, 1);
+
+			uint8_t analog_read;
+			// Read the sensor analog value received
+			SPI_ReceiveData(SPI2, &analog_read, 1);
+		}
+		//end of COMMAND_SENSOR_READ
+
+
+
+
+
+
 
 		// Confirm SPI is not busy
 		while(SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG));
