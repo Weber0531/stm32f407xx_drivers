@@ -1,7 +1,7 @@
 /*
- * 005SPI_Tx_Testing.c
+ * 006.SPI_TxOnly_Arduino.c
  *
- *  Created on: May 6, 2025
+ *  Created on: May 8, 2025
  *      Author: weber
  */
 
