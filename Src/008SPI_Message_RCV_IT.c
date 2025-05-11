@@ -43,7 +43,7 @@ void Slave_GPIO_InterruptPinInit(){
 	GPIO_Handle_t SPIIntPin;
 	memset(&SPIIntPin,0,sizeof(SPIIntPin));
 
-	// This is LED GPIO configuration
+	// GPIOD Pin 6: external interrupt from SPI slave (data available)
 	SPIIntPin.pGPIOx = GPIOD;
 	SPIIntPin.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_6;
 	SPIIntPin.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IT_FT;
