@@ -273,7 +273,7 @@ void SPI_SSIConfig(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
 /*********************************************************************
  * @fn      		  - SPI_SSOEConfig
  *
- * @brief             - Enable or disable the SSOE bit when SSM = 1
+ * @brief             - Enable or disable the SSOE bit when SSM = 0 (Hardware slave management)
  *
  * @param[in]         -
  * @param[in]         -
@@ -422,7 +422,7 @@ void SPI_IRQHandling(SPI_Handle_t *pSPIHandle){
 /*********************************************************************
  * @fn      		  - SPI_SendDataIT
  *
- * @brief             -
+ * @brief             - 準備好非同步中斷傳輸的前置設定，設定資料來源與長度、傳送狀態為 busy、開啟 TXE（傳送緩衝區空）中斷
  *
  * @param[in]         -
  * @param[in]         -
@@ -509,27 +509,76 @@ static void spi_txe_interrupt_handle(SPI_Handle_t *pSPIHandle){
 		// TxLen is zero , so close the SPI transmission and inform the application that Tx is over
 
 		// This prevents interrupts from setting up of TXE flag
-		pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_TXEIE);
-		pSPIHandle->pTxBuffer = NULL;
-		pSPIHandle->TxLen = 0;
-		pSPIHandle->TxState = SPI_READY;
+		SPI_CloseTransmission(pSPIHandle);
 		SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_TX_CMPLT);
 	}
 }
 
 
 static void spi_rxne_interrupt_handle(SPI_Handle_t *pSPIHandle){
+	// check the DFF bit in CR1
+	if(pSPIHandle->pSPIx->CR1 & (1 << SPI_CR1_DFF)) {
+		// 16 bits DFF
+		//1. load the data from the DR to RxBuffer address
+		*((uint16_t*)pSPIHandle->pRxBuffer) =pSPIHandle->pSPIx->DR;
+		pSPIHandle->RxLen -= 2;
+		(uint16_t*)pSPIHandle->pRxBuffer++;
+	} else {
+		// 8 bits DFF
+		*pSPIHandle->pRxBuffer = pSPIHandle->pSPIx->DR;
+		pSPIHandle->RxLen--;
+		pSPIHandle->pRxBuffer++;
+	}
 
+	if(!(pSPIHandle->RxLen)) {
+		// reception is complete
+		// Turn off the RXNEIE interrupt
+		SPI_CloseReception(pSPIHandle);
+		SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_RX_CMPLT);
+	}
 }
 
 
 static void spi_ovr_err_interrupt_handle(SPI_Handle_t *pSPIHandle){
-
+	uint8_t temp;
+	// 1. Clear the OVR flag
+	if(pSPIHandle->TxState != SPI_BUSY_IN_TX) {
+		temp = pSPIHandle->pSPIx->DR;
+		temp = pSPIHandle->pSPIx->SR;
+	}
+	(void)temp;
+	// 2. Inform the application
+	SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_OVR_ERR);
 }
 
 
+void SPI_ClearOVRFlag(SPI_RegDef_t *pSPIx){
+	uint8_t temp;
+	temp = pSPIx->DR;
+	temp = pSPIx->SR;
+	(void)temp;
+}
 
 
+void SPI_CloseTransmission(SPI_Handle_t *pSPIHandle){
+	pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_TXEIE);
+	pSPIHandle->pTxBuffer = NULL;
+	pSPIHandle->TxLen = 0;
+	pSPIHandle->TxState = SPI_READY;
+}
+
+
+void SPI_CloseReception(SPI_Handle_t *pSPIHandle){
+	pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_RXNEIE);
+	pSPIHandle->pRxBuffer = NULL;
+	pSPIHandle->RxLen = 0;
+	pSPIHandle->RxState = SPI_READY;
+}
+
+
+__weak void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv){
+	// This is a weak implementation. The user application may override this function.
+}
 
 
 

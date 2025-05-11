@@ -81,7 +81,7 @@ void SPI2_Inits(){
 	SPI2handle.pSPIx = SPI2;
 	SPI2handle.SPIConfig.SPI_BusConfig = SPI_BUS_CONFIG_FD;
 	SPI2handle.SPIConfig.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
-	SPI2handle.SPIConfig.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV8; // Generate SCLK of 2MHz
+	SPI2handle.SPIConfig.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV32;
 	SPI2handle.SPIConfig.SPI_DFF = SPI_DFF_8BITS;
 	SPI2handle.SPIConfig.SPI_CPHA = SPI_CPHA_LOW;
 	SPI2handle.SPIConfig.SPI_CPOL = SPI_CPOL_LOW;
@@ -254,7 +254,7 @@ int main(void){
 		// Read the ACK byte received
 		SPI_ReceiveData(SPI2, &ackbyte, 1);
 
-		if(SPI_VerifyResponse) {
+		if(SPI_VerifyResponse(ackbyte)) {
 			args[0] = LED_PIN;
 			// Send arguments
 			SPI_SendData(SPI2, args, 1);
@@ -300,7 +300,7 @@ int main(void){
 		SPI_ReceiveData(SPI2, &ackbyte, 1);
 
 		uint8_t message[] = "Hello ! How are you ??";
-		if(SPI_VerifyResponse) {
+		if(SPI_VerifyResponse(ackbyte)) {
 			args[0] = strlen((char*)message);
 			// Send arguments
 			SPI_SendData(SPI2, args, 1); // Send length
@@ -347,7 +347,7 @@ int main(void){
 		SPI_ReceiveData(SPI2, &ackbyte, 1);
 
 		uint8_t id[11];
-		if(SPI_VerifyResponse) {
+		if(SPI_VerifyResponse(ackbyte)) {
 			// read 10 bytes id from the slave
 			for(int i = 0; i < 10; i++){
 				// send dummy byte to fetch data from slave
