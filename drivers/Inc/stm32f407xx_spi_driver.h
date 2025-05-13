@@ -123,9 +123,9 @@ typedef struct
 /*
  * SPI related status flags definitions
  */
-#define SPI_TXE_FLAG	(1 << SPI_SR_TXE)
-#define SPI_RXNE_FLAG	(1 << SPI_SR_RXNE)
-#define SPI_BSY_FLAG	(1 << SPI_SR_BSY)
+#define SPI_FLAG_TXE	(1 << SPI_SR_TXE)
+#define SPI_FLAG_RXNE	(1 << SPI_SR_RXNE)
+#define SPI_FLAG_BSY	(1 << SPI_SR_BSY)
 
 
 

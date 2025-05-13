@@ -144,7 +144,7 @@ int main(void){
 		}
 
 		// confirm SPI is not busy
-		while(SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG));
+		while(SPI_GetFlagStatus(SPI2, SPI_FLAG_BSY));
 
 		//Disable the SPI2 peripheral
 		SPI_PeripheralControl(SPI2, DISABLE);

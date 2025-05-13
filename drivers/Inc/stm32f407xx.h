@@ -540,8 +540,8 @@ typedef struct
 #define I2C_SR1_BTF				2
 #define I2C_SR1_ADD10			3
 #define I2C_SR1_STOPF			4
-#define I2C_SR1_RxNE			6
-#define I2C_SR1_TxE 			7
+#define I2C_SR1_RXNE			6
+#define I2C_SR1_TXE 			7
 #define I2C_SR1_BERR			8
 #define I2C_SR1_ARLO			9
 #define I2C_SR1_AF				10
@@ -554,14 +554,14 @@ typedef struct
 /*
  *  Bit position definitions I2C_SR2
  */
-#define I2C_SR1_MSL				0
-#define I2C_SR1_BUSY			1
-#define I2C_SR1_TRA				2
-#define I2C_SR1_GENCALL			4
-#define I2C_SR1_SMBDEFAULT		5
-#define I2C_SR1_SMBHOST			6
-#define I2C_SR1_DUALF 			7
-#define I2C_SR1_PEC				8
+#define I2C_SR2_MSL				0
+#define I2C_SR2_BUSY			1
+#define I2C_SR2_TRA				2
+#define I2C_SR2_GENCALL			4
+#define I2C_SR2_SMBDEFAULT		5
+#define I2C_SR2_SMBHOST			6
+#define I2C_SR2_DUALF 			7
+#define I2C_SR2_PEC				8
 
 
 /*
