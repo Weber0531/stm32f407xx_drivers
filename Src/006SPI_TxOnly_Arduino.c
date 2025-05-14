@@ -19,7 +19,7 @@
 
 
 void delay(void){
-	for(uint32_t i = 0; i < 500000 / 2; i++);
+	for(uint32_t i = 0; i < 500000; i++);
 }
 
 void SPI_GPIOInits(void){
@@ -105,7 +105,7 @@ int main(void){
 
 	while(1){
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
@@ -121,7 +121,7 @@ int main(void){
 		SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
 
 		// Confirm SPI is not busy
-		while(SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG));
+		while(SPI_GetFlagStatus(SPI2, SPI_FLAG_BSY));
 
 		// Disable the SPI2 peripheral
 		SPI_PeripheralControl(SPI2, DISABLE);
