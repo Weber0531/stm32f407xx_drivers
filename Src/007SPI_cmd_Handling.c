@@ -301,7 +301,7 @@ int main(void){
 
 		uint8_t message[] = "Hello ! How are you ??";
 		if(SPI_VerifyResponse(ackbyte)) {
-			args[0] = strlen((char*)message);
+			args[0] = strlen((char*)message) + 1;
 			// Send arguments
 			SPI_SendData(SPI2, args, 1); // Send length
 
@@ -363,7 +363,7 @@ int main(void){
 
 
 		// Confirm SPI is not busy
-		while(SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG));
+		while(SPI_GetFlagStatus(SPI2, SPI_FLAG_BSY));
 
 		// Disable the SPI2 peripheral
 		SPI_PeripheralControl(SPI2, DISABLE);
