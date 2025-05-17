@@ -39,8 +39,8 @@ typedef struct{
 /*
  *  @I2C_ACKControl
  */
-#define I2C_ACK_EN		0
-#define I2C_ACK_DI		1
+#define I2C_ACK_EN		1
+#define I2C_ACK_DI		0
 
 /*
  *  @I2C_FMDutyCycle

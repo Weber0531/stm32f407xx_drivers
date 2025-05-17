@@ -463,7 +463,10 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 	}
 
 	// re-enable ACKing
-	I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_EN);
+	if(pI2CHandle->I2C_Config.I2C_ACKControl == I2C_ACK_EN) {
+		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_EN);
+	}
+
 }
 
 
