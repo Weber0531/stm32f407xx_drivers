@@ -30,9 +30,15 @@ void delay(void){
 void I2C1_GPIOInits(void){
 	GPIO_Handle_t I2CPins;
 
+	/*Note : Internal pull-up resistors are used */
+
 	I2CPins.pGPIOx = GPIOB;
 	I2CPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	I2CPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_OD;
+	/*
+	 * Note : In the below line use GPIO_NO_PUPD option if you want to use external pullup resistors, then you have to use 3.3K pull up resistors
+	 * for both SDA and SCL lines
+	 */
 	I2CPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PU;
 	I2CPins.GPIO_PinConfig.GPIO_PinAltFunMode = 4;
 	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
@@ -89,13 +95,11 @@ int main(void){
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
+
 		// Send some data to the slave
 		I2C_MasterSendData(&I2C1Handle, some_data, strlen((char*)some_data), SLAVE_ADDR);
 
 	}
-
-
-
 
 	return 0;
 }

@@ -349,7 +349,7 @@ uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx, uint32_t FlagName){
  * @Note              -
 
  */
-void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr){
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr){
 	// 1. Generate the START condition
 	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
@@ -383,7 +383,10 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t L
 
 	//8. Generate STOP condition and master need not to wait for the completion of stop condition.
 	//   Note: generating STOP, automatically clears the BTF
-	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+	if(Sr == I2C_DISABLE_SR) {
+		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+	}
+
 }
 
 
@@ -401,7 +404,7 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t L
  * @Note              -
 
  */
-void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr){
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr){
 	// 1. Generate the START condition
 	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
@@ -421,14 +424,16 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 		// Disable Acking
 		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DI);
 
-		// Generate STOP condition
-		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
-
 		// Clear the ADDR flag
 		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
 
 		// Wait until  RXNE becomes 1
 		while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_RXNE));
+
+		// Generate STOP condition
+		if(Sr == I2C_DISABLE_SR) {
+			I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+		}
 
 		// Read data in to buffer
 		*pRxBuffer = pI2CHandle->pI2Cx->DR;
@@ -450,7 +455,9 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 				I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DI);
 
 				// Generate STOP condition
-				I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+				if(Sr == I2C_DISABLE_SR) {
+					I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+				}
 
 			}
 

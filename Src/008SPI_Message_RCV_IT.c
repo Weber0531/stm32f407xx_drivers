@@ -39,6 +39,7 @@ volatile char ReadByte;
 
 
 
+/*This function configures the gpio pin over which SPI peripheral issues data available interrupt */
 void Slave_GPIO_InterruptPinInit(){
 	GPIO_Handle_t SPIIntPin;
 	memset(&SPIIntPin,0,sizeof(SPIIntPin));
