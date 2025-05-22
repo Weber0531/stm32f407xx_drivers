@@ -146,6 +146,29 @@ void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx){
 }
 
 
+void I2C_SlaveEnableDisableCallbackEvents(I2C_RegDef_t *pI2Cx, uint8_t EnorDi){
+	if(EnorDi == ENABLE) {
+		// Enable ITBUFEN Control Bit
+		pI2Cx->CR2 |= ( 1 << I2C_CR2_ITBUFEN);
+
+		// Enable ITEVFEN Control Bit
+		pI2Cx->CR2 |= ( 1 << I2C_CR2_ITEVTEN);
+
+		// Enable ITERREN Control Bit
+		pI2Cx->CR2 |= ( 1 << I2C_CR2_ITERREN);
+	} else {
+		// Disable ITBUFEN Control Bit
+		pI2Cx->CR2 &= ~( 1 << I2C_CR2_ITBUFEN);
+
+		// Disable ITEVFEN Control Bit
+		pI2Cx->CR2 &= ~( 1 << I2C_CR2_ITEVTEN);
+
+		// Disable ITERREN Control Bit
+		pI2Cx->CR2 &= ~( 1 << I2C_CR2_ITERREN);
+	}
+}
+
+
 /*********************************************************************
  * @fn      		  - I2C_PeriClockControl
  *
