@@ -1,5 +1,5 @@
 /*
- * 012I2C_Slave_Tx_String.c
+ * 013I2C_Slave_Tx_String2.c
  *
  *  Created on: May 22, 2025
  *      Author: weber
@@ -14,8 +14,11 @@
 
 I2C_Handle_t I2C1Handle;
 
-// Tx_buffer
-uint8_t Tx_buf[32] = "STM32 slave mode testing..";
+// very large message (around 100 bytes)
+uint8_t Tx_buf[] = "HiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHi";
+uint32_t data_len = 0;
+uint8_t commandCode;
+
 
 void delay(void){
 	for(uint32_t i = 0; i < 500000 / 2; i++);
@@ -66,6 +69,7 @@ void GPIO_ButtonInit(void){
 }
 
 int main(void){
+	data_len = strlen((char*)Tx_buf);
 
 	GPIO_ButtonInit();
 
@@ -104,17 +108,20 @@ void I2C1_ER_IRQHandler (void){
 
 
 void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t AppEv){
-	static uint8_t commandCode = 0;
-	static uint8_t Cnt = 0;
+	static uint32_t Tx_index = 0;
+	static uint32_t Cnt = 0;
 
 	if(AppEv == I2C_EV_DATA_REQ){
 		// Master wants some data. slave has to send it
 		if(commandCode == 0x51) {
 			// send the length information to the master
-			I2C_SlaveSendData(pI2CHandle->pI2Cx, strlen((char*)Tx_buf));
+			// Here we are sending 4 bytes of length information
+			I2C_SlaveSendData(pI2CHandle->pI2Cx, (data_len >> ((Cnt % 4) * 8)) & 0xff);
+			Cnt++;
+
 		} else if(commandCode == 0x52) {
-			// Send the contents of Tx_buf
-			I2C_SlaveSendData(pI2CHandle->pI2Cx, Tx_buf[Cnt++]);
+			// Sending Tx_buf contents indexed by Tx_index variable
+			I2C_SlaveSendData(pI2CHandle->pI2Cx, Tx_buf[Tx_index++]);
 		}
 	} else if(AppEv == I2C_EV_DATA_RCV) {
 		//Data is waiting for the slave to read . slave has to read it
@@ -122,11 +129,29 @@ void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t AppEv){
 	} else if(AppEv == I2C_ERROR_AF) {
 		// This happens only during slave transmission
 		// Master has sent the NACK. so slave should understand that master doesn't need more data
-		commandCode = 0xff;
+		// slave concludes end of Tx
+
+		// If the current active code is 0x52 then don't invalidate
+		if(!(commandCode == 0x52)){
+			commandCode = 0xff;
+		}
+
+		// Reset the cnt variable because its end of transmission
 		Cnt = 0;
+
+		// Slave concludes it sent all the bytes when w_ptr reaches data_len
+		if(Tx_index >= data_len) {
+			commandCode = 0xff;
+			Tx_index = 0;
+		}
+
+
 	} else if(AppEv == I2C_EV_STOP) {
 		// This happens only during slave reception
 		// Master has ended the I2C communication with the slave
+		// slave concludes end of Rx
+
+		// Cnt = 0;
 	}
 }
 

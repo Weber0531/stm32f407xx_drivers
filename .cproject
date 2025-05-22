@@ -71,12 +71,12 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1284265341" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.578709482.1140603495" name="011I2C_Master_Rx_TestingIT.c" rcbsApplicability="disable" resourcePath="Src/011I2C_Master_Rx_TestingIT.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325.1600009620">
-						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325.1600009620" name="MCU/MPU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325"/>
+					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.578709482.379317519" name="012I2C_Slave_Tx_String.c" rcbsApplicability="disable" resourcePath="Src/012I2C_Slave_Tx_String.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325.1515782156">
+						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325.1515782156" name="MCU/MPU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.968102325"/>
 					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
-						<entry excluding="011I2C_Master_Rx_TestingIT.c|010I2C_Master_Rx_Testing.c|009I2C_Master_TX_Testing.c|007SPI_cmd_Handling.c|006SPI_TxOnly_Arduino.c|005SPI_Tx_Testing.c|004Button_Interrupt.c|003Led_Button_EXT.c|008SPI_Message_RCV_IT.c|002Led_Button.c|001led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="012I2C_Slave_Tx_String.c|011I2C_Master_Rx_TestingIT.c|010I2C_Master_Rx_Testing.c|009I2C_Master_TX_Testing.c|007SPI_cmd_Handling.c|006SPI_TxOnly_Arduino.c|005SPI_Tx_Testing.c|004Button_Interrupt.c|003Led_Button_EXT.c|008SPI_Message_RCV_IT.c|002Led_Button.c|001led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
 					</sourceEntries>
