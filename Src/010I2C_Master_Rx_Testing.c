@@ -52,6 +52,8 @@ void I2C1_Inits(void){
 	I2C1Handle.I2C_Config.I2C_FMDutyCycle = I2C_FM_DUTY_2;
 	I2C1Handle.I2C_Config.I2C_SCLSpeed = I2C_SCL_SPEED_SM;
 	I2C1Handle.I2C_Config.I2C_ACKControl = I2C_ACK_EN;
+
+	I2C_Init(&I2C1Handle);
 }
 
 void GPIO_ButtonInit(void){
@@ -92,7 +94,7 @@ int main(void){
 
 	while(1){
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();

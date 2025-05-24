@@ -91,13 +91,13 @@ int main(void){
 
 	while(1){
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
 
 		// Send some data to the slave
-		I2C_MasterSendData(&I2C1Handle, some_data, strlen((char*)some_data), SLAVE_ADDR);
+		I2C_MasterSendData(&I2C1Handle, some_data, strlen((char*)some_data), SLAVE_ADDR, I2C_DISABLE_SR);
 
 	}
 
