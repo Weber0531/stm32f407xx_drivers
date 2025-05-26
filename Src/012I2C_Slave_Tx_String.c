@@ -50,6 +50,8 @@ void I2C1_Inits(void){
 	I2C1Handle.I2C_Config.I2C_FMDutyCycle = I2C_FM_DUTY_2;
 	I2C1Handle.I2C_Config.I2C_SCLSpeed = I2C_SCL_SPEED_SM;
 	I2C1Handle.I2C_Config.I2C_ACKControl = I2C_ACK_EN;
+
+	I2C_Init(&I2C1Handle);
 }
 
 void GPIO_ButtonInit(void){
@@ -75,17 +77,17 @@ int main(void){
 	// I2C peripheral configuration
 	I2C1_Inits();
 
-	// I2C IRQ configurations
-	I2C_IRQInterruptConfig(IRQ_NO_I2C1_EV, ENABLE);
-	I2C_IRQInterruptConfig(IRQ_NO_I2C1_ER, ENABLE);
-
-	I2C_SlaveEnableDisableCallbackEvents(I2C1, ENABLE);
-
 	// Enable the I2C peripheral
 	I2C_PeripheralControl(I2C1, ENABLE);
 
 	// ACK bit is made 1 after PE=1
 	I2C_ManageAcking(I2C1, ENABLE);
+
+	// I2C IRQ configurations
+	I2C_IRQInterruptConfig(IRQ_NO_I2C1_EV, ENABLE);
+	I2C_IRQInterruptConfig(IRQ_NO_I2C1_ER, ENABLE);
+
+	I2C_SlaveEnableDisableCallbackEvents(I2C1, ENABLE);
 
 	while(1);
 
