@@ -117,7 +117,7 @@ typedef struct{
 #define USART_EVENT_IDLE			3
 #define USART_ERR_ORE				4
 #define USART_ERR_FE				5
-#define USART_ERR_NE				6
+#define USART_ERR_NF				6
 
 
 /******************************************************************************************

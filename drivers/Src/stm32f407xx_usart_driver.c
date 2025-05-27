@@ -5,6 +5,7 @@
  *      Author: weber
  */
 
+#include <stdint.h>
 #include "stm32f407xx_usart_driver.h"
 
 
@@ -545,6 +546,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 {
 
 	uint32_t temp1 , temp2, temp3;
+	uint16_t *pdata;
 
 /************************* Check for TC flag ********************************************/
 
@@ -636,7 +638,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				else
 				{
 					// This is 8bit data transfer
-					pUSARTHandle->pUSARTx->DR = (*pTxBuffer  & (uint8_t)0xFF);
+					pUSARTHandle->pUSARTx->DR = (*pUSARTHandle->pTxBuffer  & (uint8_t)0xFF);
 
 					// Increment the buffer address
 					pUSARTHandle->pTxBuffer++;
@@ -646,7 +648,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				}
 
 			}
-			if (TxLen == 0 )
+			if (pUSARTHandle->TxLen == 0 )
 			{
 				// TxLen is zero
 				// Clear the TXEIE bit (disable interrupt for TXE flag )
@@ -779,7 +781,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 		// Clear the IDLE flag. Refer to the RM to understand the clear sequence
 		temp3 = pUSARTHandle->pUSARTx->SR;
 		temp3 = pUSARTHandle->pUSARTx->DR;
-		(void)temmp3;
+		(void)temp3;
 
 		// this interrupt is because of idle
 		USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_IDLE);
@@ -825,14 +827,14 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_FE);
 		}
 
-		if(temp1 & ( 1 << USART_SR_NE) )
+		if(temp1 & ( 1 << USART_SR_NF) )
 		{
 			/*
 				This bit is set by hardware when noise is detected on a received frame. It is cleared by a
 				software sequence (an read to the USART_SR register followed by a read to the
 				USART_DR register).
 			*/
-			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_NE);
+			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_NF);
 		}
 
 		if(temp1 & ( 1 << USART_SR_ORE) )
@@ -925,7 +927,24 @@ void USART_SetBaudRate(USART_RegDef_t *pUSARTx, uint32_t BaudRate)
 	}
 
 
+/*********************************************************************
+ * @fn      		  - USART_ApplicationEventCallback
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
 
+ */
+__weak void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t event)
+{
+
+}
 
 
 

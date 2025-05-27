@@ -23,7 +23,7 @@ uint32_t RCC_GetPCLK1Value(void){
 	} else if(clksrc == 1) {
 		SystemClk = 8000000;
 	}else if(clksrc == 2) {
-		SystemClk = RCC_GetPLLOutClk();
+		SystemClk = RCC_GetPLLOutputClock();
 	}
 
 	// AHB
@@ -75,7 +75,7 @@ uint32_t RCC_GetPCLK2Value(void){
 	} else if(clksrc == 1) {
 		SystemClk = 8000000;
 	}else if(clksrc == 2) {
-		SystemClk = RCC_GetPLLOutClk();
+		SystemClk = RCC_GetPLLOutputClock();
 	}
 
 	// AHB
