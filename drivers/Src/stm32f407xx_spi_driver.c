@@ -179,7 +179,7 @@ void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len){
 			pSPIx->DR = *((uint16_t*)pTxBuffer);
 			Len--;
 			Len--;
-			(uint16_t*)pTxBuffer++;
+			pTxBuffer+=2;
 		} else {
 			// 8 bits DFF
 			pSPIx->DR = *pTxBuffer;

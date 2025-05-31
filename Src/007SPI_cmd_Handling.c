@@ -107,7 +107,7 @@ void GPIO_ButtonInit(void){
 
 
 uint8_t SPI_VerifyResponse(uint8_t ackbyte){
-	if(ackbyte == 0xf5) {
+	if(ackbyte == 0xF5) {
 		// ACK
 		return 1;
 	}
@@ -146,7 +146,7 @@ int main(void){
 
 	while(1){
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
@@ -189,7 +189,7 @@ int main(void){
 		 * 			2. COMMAND_SENSOR_READ   <analog pin number(1) >
 		 ***********************************************************************/
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
@@ -235,7 +235,7 @@ int main(void){
 		 * 				3.  COMMAND_LED_READ 	 <pin no(1) >
 		 ***********************************************************************/
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
@@ -280,7 +280,7 @@ int main(void){
 		 * 				4. COMMAND_PRINT 		<len(2)>  <message(len) >
 		 ***********************************************************************/
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
@@ -327,7 +327,7 @@ int main(void){
 		 * 						5. COMMAND_ID_READ
 		 ***********************************************************************/
 		// wait till button is pressed
-		while(GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
+		while(!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_NO_0));
 
 		// to avoid button de-bouncing related issues 200ms of delay
 		delay();
