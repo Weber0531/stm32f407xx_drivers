@@ -10,6 +10,17 @@
 #include "DS1307.h"
 
 
+char* get_day_of_week(uint8_t i){
+	char* days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+	return days[i-1];
+}
+
+// hh:mm:ss
+char* time_to_string(RTC_time_t *rtc_time){
+
+}
+
 int main(void){
 	RTC_time_t current_time;
 	RTC_date_t current_date;
@@ -50,3 +61,8 @@ int main(void){
 
 	return 0;
 }
+
+
+
+
+

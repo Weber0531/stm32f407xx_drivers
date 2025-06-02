@@ -58,6 +58,8 @@ void notify_controller(void)
   digitalWrite(8,HIGH);
   delayMicroseconds(50);
   digitalWrite(8,LOW);
+  delayMicroseconds(50);
+  digitalWrite(8,HIGH);
 }
 
 

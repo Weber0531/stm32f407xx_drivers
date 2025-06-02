@@ -26,7 +26,10 @@ void setup() {
 
 void loop() {
 
-uint32_t rem_len=0,last_read=0;
+  uint32_t rem_len=0,last_read=0;
+  while(Serial.available() > 0) {
+    char dummy_read = Serial.read();
+  }
   Serial.println("Arduino Master");
   Serial.println("Send character \"s\" to begin");
   Serial.println("-----------------------------");
