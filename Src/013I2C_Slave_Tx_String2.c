@@ -136,6 +136,11 @@ void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t AppEv){
 		// If the current active code is 0x52 then don't invalidate
 		if(!(commandCode == 0x52)){
 			commandCode = 0xff;
+		} else {
+			// ADDED LINE: this line is needed in order not to lose one byte per I2C transaction
+			// since we write one byte to DR register but we receive NACK and that byte is never transmitted
+
+			Tx_index--;
 		}
 
 		// Reset the cnt variable because its end of transmission
