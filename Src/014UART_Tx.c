@@ -6,7 +6,8 @@
  */
 
 
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
 #include "stm32f407xx.h"
 
 char msg[1024] = "UART Tx testing...\n\r";

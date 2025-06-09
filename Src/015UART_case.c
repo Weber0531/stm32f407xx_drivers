@@ -6,6 +6,8 @@
  */
 
 
+#include <stdio.h>
+#include <string.h>
 #include "stm32f407xx.h"
 
 // we have 3 different messages that we transmit to arduino
@@ -103,7 +105,7 @@ int main(void){
 		while(USART_ReceiveDataIT(&usart2_handle, rx_buf, strlen(msg[cnt])) != USART_READY);
 
 		// Send the msg indexed by cnt in blocking mode
-		USART_SendData(&usart2_handle, (uint8_t)msg[cnt], strlen(msg[cnt]));
+		USART_SendData(&usart2_handle, (uint8_t*)msg[cnt], strlen(msg[cnt]));
 
 		printf("Transmitted : %s\n",msg[cnt]);
 

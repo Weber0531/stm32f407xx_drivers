@@ -397,6 +397,8 @@ uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle,uint8_t *pRxBuffer, uin
 		pUSARTHandle->pRxBuffer = pRxBuffer;
 		pUSARTHandle->RxBusyState = USART_BUSY_IN_RX;
 
+		(void)pUSARTHandle->pUSARTx->DR;
+
 		// Enable interrupt for RXNE
 		pUSARTHandle->pUSARTx->CR1 |= (1 << USART_CR1_RXNEIE);
 
