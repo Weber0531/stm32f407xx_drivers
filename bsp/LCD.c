@@ -10,6 +10,8 @@
 
 static void write_4_bits(uint8_t value);
 static void lcd_enable(void);
+static void mdelay(uint32_t cnt);
+static void udelay(uint32_t cnt);
 
 void lcd_send_command(uint8_t cmd){
 	/* RS = 0 , For LCD command */
@@ -29,7 +31,7 @@ void lcd_send_command(uint8_t cmd){
  * First higher nibble of the data will be sent on to the data lines D4,D5,D6,D7
  * Then lower nibble of the data will be set on to the data lines D4,D5,D6,D7
  */
-void lcd_send_char(uint8_t data){
+void lcd_print_char(uint8_t data){
 	/* RS = 1 , For LCD user data */
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_GPIO_RS, SET);
 
@@ -38,6 +40,13 @@ void lcd_send_char(uint8_t data){
 
 	write_4_bits(data >> 4); // Higher nibble
 	write_4_bits(data & 0x0F); // Lower nibble
+}
+
+
+void lcd_print_string(char* message){
+	do {
+		lcd_print_char((uint8_t)*message++);
+	} while(*message != '\0');
 }
 
 void lcd_init(void){
@@ -101,6 +110,17 @@ void lcd_init(void){
 
 	write_4_bits(0x3);
 	write_4_bits(0x2);
+
+	// Function set command
+	lcd_send_command(LCD_CMD_4DL_2N_5X8F);
+
+	// Display ON and cursor ON
+	lcd_send_command(LCD_CMD_DON_CURON);
+
+	lcd_display_clear();
+
+	// Entry mode set
+	lcd_send_command(LCD_CMD_INCADD);
 }
 
 
@@ -115,6 +135,54 @@ static void write_4_bits(uint8_t value){
 }
 
 
+void lcd_display_clear(void){
+	// Display clear
+	lcd_send_command(LCD_CMD_DIS_CLEAR);
+
+	/*
+	 * check page number 24 of datasheet.
+	 * display clear command execution wait time is around 2ms
+	 */
+	mdelay(2);
+}
+
+
+void lcd_display_return_home(void){
+	// Display return home
+	lcd_send_command(LCD_CMD_DIS_RETURN_HOME);
+
+	/*
+	 * check page number 24 of datasheet.
+	 * display clear command execution wait time is around 2ms
+	 */
+	mdelay(2);
+
+}
+
+
+/**
+  *   Set LCD to a specified location given by row and column information
+  *   Row Number (1 to 2)
+  *   Column Number (1 to 16) Assuming a 2 X 16 characters display
+  */
+void lcd_set_cursor(uint8_t row, uint8_t column){
+	column--;
+
+	switch(row) {
+	case 1:
+		/* Set cursor to 1st row address and add index */
+		lcd_send_command(column |= 0x80);
+		break;
+	case 2:
+		/* Set cursor to 2nd row address and add index */
+		lcd_send_command(column |= 0xC0);
+		break;
+	default:
+		break;
+	}
+}
+
+
 // do the high to low transition on the enable line
 static void lcd_enable(void){
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_GPIO_EN, SET);
@@ -124,5 +192,12 @@ static void lcd_enable(void){
 }
 
 
+static void mdelay(uint32_t cnt){
+	for(uint32_t i = 0; i < (cnt * 1000); i++);
+}
 
+
+static void udelay(uint32_t cnt){
+	for(uint32_t i = 0; i < (cnt * 1); i++);
+}
 
