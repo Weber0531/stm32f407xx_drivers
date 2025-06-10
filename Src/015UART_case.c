@@ -31,7 +31,7 @@ void USART2_GPIOInit(void){
 	usart_gpios.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	usart_gpios.GPIO_PinConfig.GPIO_PinAltFunMode = 7;
 	usart_gpios.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
-	usart_gpios.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	usart_gpios.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PU;
 	usart_gpios.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 
 	// USART2 TX
@@ -102,7 +102,7 @@ int main(void){
 
 		// First lets enable the reception in interrupt mode
 		// this code enables the receive interrupt
-		while(USART_ReceiveDataIT(&usart2_handle, rx_buf, strlen(msg[cnt])) != USART_READY);
+		while(USART_ReceiveDataIT(&usart2_handle, (uint8_t*)rx_buf, strlen(msg[cnt])) != USART_READY);
 
 		// Send the msg indexed by cnt in blocking mode
 		USART_SendData(&usart2_handle, (uint8_t*)msg[cnt], strlen(msg[cnt]));
