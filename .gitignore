@@ -17,3 +17,4 @@ Release/
 .metadata/
 .launches/
 MX_*/ 
+*.DS_Store
